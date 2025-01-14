@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const userRouter = require("./routers/user");
+//const userRouter = require("./routers/user");
+const authRouter = require("./routers/auth");
 const { restrictTo, verifyJWTAuthToken } = require("./middleware/auth");
 require("dotenv").config();
 
@@ -19,10 +20,10 @@ mongoose.connect(process.env.MONGODB_URL, {
 app.use(express.json());
 
 // Routes
-app.get("/", verifyJWTAuthToken, restrictTo("Creator"), (req, res) => {
+app.get("/", verifyJWTAuthToken, (req, res) => {
   res.send("Hello World");
 });
-app.use("/", userRouter);
+app.use("/auth", authRouter);
 
 // Start the server
 const server = app.listen(process.env.PORT || 3000, () => {
