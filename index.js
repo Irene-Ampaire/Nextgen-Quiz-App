@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 //const userRouter = require("./routers/user");
 const authRouter = require("./routers/auth");
 const { restrictTo, verifyJWTAuthToken } = require("./middleware/auth");
@@ -37,3 +38,32 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+
+const quizSchema = new Schema({
+  title : String,
+  settings: Schema.Types.Mixed, //store arbitrary settings (e.g., time limit, scoring system)
+  questions: Schema.Types.Array //store an array of questions
+});
+
+// sample quiz document
+const quizDoc = {
+  title : "My Quiz",
+  settings : {
+    timeLimit : 40,
+    scoringSystem : 'points',
+    randomizeQuestions: true
+    },
+    questions: [
+      {
+        text: 'Energy is measured in?',
+        answers : ['Newtons', 'Joules', 'kg/m²'],
+        correctAnswer : 'Joules'
+      },
+      {
+        text : 'Which is not a form of potential energy?',
+        answers : ['Chemical', 'Elastic', 'Sound'],
+        correctAnswer : 'Sound'
+      }
+    ]
+};
